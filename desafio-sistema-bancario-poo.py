@@ -263,13 +263,24 @@ def filtrar_cliente(cpf, clientes):
     return clientes_filtrados[0] if clientes_filtrados else None
 
 
+def listar_contas_cliente(cliente):
+    for i, conta in enumerate(cliente.contas, start=1):
+        print(f"[{i}] {conta}")
+
 def recuperar_conta_cliente(cliente):
     if not cliente.contas:
         print("\n@@@ Cliente não possui conta! @@@")
         return
 
-    # FIXME: não permite cliente escolher a conta
-    return cliente.contas[0]
+    print("\n=== Contas do Cliente ===")
+    listar_contas_cliente(cliente)
+    indice_conta = int(input("Escolha o número da conta: ")) - 1
+
+    try:
+        return cliente.contas[indice_conta]
+    except IndexError:
+        print("\n@@@ Conta inválida! @@@")
+        return
 
 
 @log_transacao
@@ -381,8 +392,9 @@ def criar_conta(numero_conta, clientes, contas):
 
 
 def listar_contas(contas):
-    for conta in ContasIterador(contas):
+    for i, conta in enumerate(ContasIterador(contas), start=1):
         print("=" * 100)
+        print(f"[{i}]")
         print(textwrap.dedent(str(conta)))
 
 
